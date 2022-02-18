@@ -1,0 +1,38 @@
+"use strict";
+exports.__esModule = true;
+var util_1 = require("util");
+var Student = /** @class */ (function () {
+    function Student(firstName, middleInitial, lastName) {
+        this.firstName = firstName;
+        this.middleInitial = middleInitial;
+        this.lastName = lastName;
+        this.dataType = function () {
+            // Boolean
+            var isDone = false;
+            // Number
+            var decimal = 6;
+            var hex = 0xf00d; // 1个16进数占半比特
+            var binary = 10; // 默认给4比特
+            var octal = 484; // 默认给4比特
+            // String
+            var color = "blue";
+            color = 'red';
+            // Template String
+            var sentence = "Hello,my age is " + decimal + ".\n        And I will be " + (decimal + 1) + " years old next month.";
+            util_1.log(sentence);
+        };
+        this.fullName = firstName + " " + middleInitial + " " + lastName;
+        util_1.log(this.fullName);
+        this.dataType();
+    }
+    return Student;
+}());
+function greeter(person) {
+    return "Hello," + person.firstName + " " + person.lastName;
+}
+var user = {
+    firstName: "Huang",
+    lastName: "Richao"
+};
+user = new Student("Jane", "M.", "User");
+// document.body.innerHTML = greeter(user)

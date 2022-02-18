@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1 id="page-title">Coldplay</h1> // h1节点里有Coldplay子节点
+    <p>乐队与 1997 年成立于伦敦</p>
+    <ul class="l">
+        <li>Chris Martin</li>
+        <li>Jonny Buckland</li>
+    </ul>
+    <script>
+        document.write("您的浏览器支持JavaScript脚本!");
+
+        document.getElementsByTagName('li') // 根据元素名返回HTML元素
+
+        var l = document.querySelector('.l')
+        l.childNodes //返回l的所有子节点（包括元素）
+        l.innerText // 返回l的所有节点内容
+
+        var pageTitle = document.getElementById('page-title')
+        var s = document.querySelector('l')
+
+        var t = document.createTextNode("张三")
+        var e = document.createElement("li")
+        e.appendChild(t)
+        // s.insertBefore(e,s.childNodes[0])
+        console.log(pageTitle.nodeName, pageTitle.innerText)
+    </script>
+    <script src='./index.js'></script>
+</body>
+
+</html>

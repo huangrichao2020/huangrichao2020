@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>二维码的动态效果</title>
+    <style>
+    body {
+        margin: 0px;
+        background-color: aliceblue
+    }
+
+    #box {
+        width: 100%;
+        height: 100px;
+        background-color: black;
+
+        position: fixed;
+        bottom: 0px;
+    }
+
+    #wechat {
+        width: 44px;
+        height: 44px;
+
+        background-image: url("imgs/wechat.png");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        /* margin:auto开启水平居中 */
+        margin: 28px auto;
+
+        position: relative;
+    }
+
+    #code {
+        /* 隐藏效果 */
+        display: none;
+
+        width: 180px;
+        height: 180px;
+        background-color: white;
+
+        background-image: url("imgs/code_wps.jpg");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='male.png', sizingMethod='scale');
+        position: absolute;
+        left: -66px;
+        bottom: 70px;
+    }
+
+    #wechat:hover {
+        background-image: url("imgs/wechatH.png");
+    }
+
+/* 鼠标放到微信图标上时，显示出二维码 */
+    #wechat:hover>#code {
+        display: block;
+    }
+    </style>
+</head>
+
+<body >
+    <!-- 用于包含二维码所有的内容，显示在页面中的底部 -->
+    <div id="box">
+        <!-- 用于显示微信图标 -->
+        <div id="wechat">
+            <!-- 用于显示/隐藏二维码图片 -->
+            <div id="code"></div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>行内块级元素对齐方式</title>
+    <style>
+        div {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        a {
+            display: inline-block;
+            /* 设置为行内块级元素 */
+            /* 行内块级元素允许设置宽度和高度 */
+            width: 161px;
+            height: 40px;
+
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+
+        .btn1 {
+            background-image: url("imgs/btn1.png");
+        }
+
+        .btn2 {
+            background-image: url("imgs/btn2.png");
+        }
+
+        .btn3 {
+            background-image: url("imgs/btn3.png");
+        }
+
+        .btn4 {
+            background-image: url("imgs/btn4.png");
+        }
+
+        [id="ni"]{
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <a class="btn1" id="ni" href="#"></a>
+        <a class="btn2" href="#"></a>
+        <a class="btn3" href="#"></a>
+        <a class="btn4" href="#"></a>
+    </div>
+</body>
+
+</html>

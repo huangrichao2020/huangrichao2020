@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- GrowingIO Analytics code version 2.1 -->
+<!-- Copyright 2015-2017 GrowingIO, Inc. More info available at http://www.growingio.com -->
+<script type='text/javascript'>
+    !function(e,t,n,g,i){e[i]=e[i]||function(){(e[i].q=e[i].q||[]).push(arguments)},n=t.createElement("script"),tag=t.getElementsByTagName("script")[0],n.async=1,n.src=('https:'==document.location.protocol?'https://':'http://')+g,tag.parentNode.insertBefore(n,tag)}(window,document,"script","assets.giocdn.com/2.1/gio.js","gio");
+      gio('init', '0a1b4118dd954ec3bcc69da5138bdb96', {});
+      ​
+      //custom page code begin here
+      ​​gio('config', {'hashtag':true});
+      //custom page code end here
+    ​// 设置登录用户ID
+        gio('setUserId', 'lisi');
+        gio('page.set', 'city', 'hangzhou');
+        gio('people.set', 'age', 22);
+      gio('send');
+    ​
+    </script>
+    <!-- End GrowingIO Analytics code version: 2.1 -->
+    </head>
+<body>
+
+<h2>1 JavaScript能用来做什么</h2>
+
+<!-- 每个标签都是一个dom节点， 
+    innerHTML是dom节点的文本属性，可以用来更新dom节点文本内容 -->
+<button type="button"
+onclick="fun1()">
+点击这里来显示日期和时间
+</button>
+<p id="demo"></p>
+
+<!-- JS修改HTML内容 -->
+<p>2 JavaScript 能够改变 HTML 内容。</p>
+
+<button type="button" 
+onclick="htmlWrite()">点击我并触发事件！</button>
+
+<p id="demo1"></p>
+
+
+<p>3 在本例中，JavaScript 改变了图像的 src 属性值。</p>
+
+<button onclick="fun3()"">开灯</button>
+
+<img id="myImage" border="0" src="./imgs/wechat.png" style="text-align:center;">
+
+<button onclick="fun4()">关灯</button>
+
+
+<p id="demo2" data-growing-container>4 JavaScript 能够改变 HTML 元素的样式。</p>
+
+<button type="button" onclick="func5()">
+点击我！
+</button>
+
+<p id="demo3"data-growing-title="显示/隐藏">5 JavaScript 能够隐藏/显示 HTML 元素。</p>
+
+<button type="button" onclick="func6()">
+点击我！
+</button>
+
+<p id="demo3" growing-ignore='true'>6 JavaScript 能够重写HTML</p>
+
+<button type="button" onclick="htmlOutput()">
+点我！
+</button>
+
+<p id="demo3">7 JavaScript 能够打印提示</p>
+<button type="button" onclick="htmlInfo()">
+    点我！
+</button>
+
+<p id="demo3">8 JavaScript 能够打印控制台</p>
+
+<button type="button" onclick="htmlInfo()">
+    点我！
+</button>
+
+<p>9 复杂JS逻辑与语句</p>
+<p id="demo4">
+    <b>JavaScript 程序</b> 是一系列由计算机执行的 <b>语句</b>。
+</p>
+<button type="button" onclick="addAndInner(1.0,2.0,'demo4')">
+    点我！
+</button>
+<p>10 输入框</p>
+<input type='text' growing-track='true' />
+
+
+
+<script src="./index0.js">
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+{
+  "name": "huangrichao-react",
+  "version": "0.1.1",
+  "private": false,
+  "dependencies": {
+    "@babel/preset-react": "^7.0.0",
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.12",
+    "@types/react": "^16.9.5",
+    "@types/react-dom": "^16.9.1",
+    "babel-loader": "^8.0.6",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "peer": "^0.2.10",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "3.1.2",
+    "react-test-renderer": "^16.9.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "eslint": "^6.4.0",
+    "eslint-plugin-react": "^7.14.3",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4",
+    "webpack": "^4.40.2"
+  },
+  "homepage": "http://react-learn.github.com",
+  "description": "![](https://tva1.sinaimg.cn/large/006y8mN6ly1g7pmjdawinj30ee0niq3c.jpg)",
+  "main": ".eslintrc.js",
+  "author": "huangrichao",
+  "license": "ISC"
+}

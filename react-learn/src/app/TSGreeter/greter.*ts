@@ -1,0 +1,74 @@
+
+
+
+// /*
+//  * @Author: HuangRichao 
+//  * @Date: 2019-10-08 17:41:43 
+//  * @Last Modified by: HuangRichao
+//  * @Last Modified time: 2019-10-08 19:18:24
+//  */
+
+
+//  // 要素：接口 功能方法 数据对象 业务操作
+//  // 数据对象可临时定义，也可以专门定制一个类后new一个。
+//  // 对象不必继承接口，格式相同能兼容即可
+
+
+// // basic data-type
+// interface IPerson {
+//     firstName: string,
+//     lastName: string
+// }
+
+
+// class Student {
+//     private fullName: string;
+//     constructor(public firstName:string, public middleInitial:string, public lastName:string) {
+//         this.fullName = firstName + " " + middleInitial + " " + lastName;
+//         console.log(this.fullName);
+//         this.dataType();
+//     }
+
+//     dataType = () => {
+//         // Boolean
+//         let isDone: boolean = false;
+//         // Number
+//         let decimal:number = 6;
+//         let hex:number = 0xf00d; // 1个16进数占半比特
+//         let binary:number = 0b1010; // 默认给4比特
+//         let octal:number = 0o744; // 默认给4比特
+//         // String
+//         let color:string = "blue";
+//         color = 'red';
+//         // Template String
+//         let sentence:string = `Hello,my age is ${decimal}.
+//         And I will be ${decimal+1} years old next month.`;
+
+//         // Array
+//         let list: number[] = [1, 2, 3];
+//         let listArr: Array<number> = [1, 2, 3];
+
+//         // Tuple 
+//         let x:[string,number];
+//         // Initialize it
+//         x = ["hello",10]
+//         console.log(x[0].substring(1))
+//         // x[1] = "world"; 
+//         console.log(sentence);
+
+//     }
+// }
+
+
+// function greeter(person:IPerson){
+//     return `Hello,${person.firstName} ${person.lastName}`
+// }
+
+// let user = {
+//     firstName:"Huang",
+//     lastName:"Richao"
+// }
+
+// user = new Student("Jane", "M.", "User")
+
+// // document.body.innerHTML = greeter(user)

@@ -1,0 +1,34 @@
+{
+  "name": "ts-learn",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1",
+    "huangrichao-react": "^0.1.0",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-scripts-ts": "3.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "jest": "jest",
+    "eject": "react-scripts-ts eject",
+    "dev": "cd src && npx webpack --config webpack.dev.config.js",
+    "prod": "cd src && npx webpack --config webpack.prod.config.js",
+    "open": "open -a '/Applications/Google Chrome.app' src/greeter.html"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.11",
+    "@types/react": "^16.9.5",
+    "@types/react-dom": "^16.9.1",
+    "jest-cli": "^26.4.2",
+    "ts-loader": "^4.5.0",
+    "typescript": "^3.6.3",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-merge": "^5.1.3"
+  }
+}

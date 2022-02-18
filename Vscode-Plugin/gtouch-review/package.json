@@ -1,0 +1,66 @@
+{
+	"name": "gtouch-review",
+	"displayName": "触达预览",
+	"description": "Help to review gtouch messages. GrowingIO公司触达测试工具",
+	"version": "0.0.1",
+	"publisher": "Huang Richao",
+	"engines": {
+		"vscode": "^1.39.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"icon": "https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=g&step_word=&hs=0&pn=3&spn=0&di=550&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=0&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=undefined&cs=2991939260%2C4092766219&os=2565391953%2C246897048&simid=3350167877%2C323598418&adpicid=0&lpn=0&ln=987&fr=&fmq=1571317203484_R&fm=&ic=undefined&s=undefined&hd=undefined&latest=undefined&copyright=undefined&se=&sme=&tab=0&width=undefined&height=undefined&face=undefined&ist=&jit=&cg=&bdtype=0&oriquery=&objurl=http%3A%2F%2Fwww.taopic.com%2Fuploads%2Fallimg%2F140316%2F234681-1403160Z54886.jpg&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3Bpw5rtv_z%26e3Bv54AzdH3Fejvp56AzdH3Fda89anAzdH3F9lmncb_z%26e3Bip4s&gsm=&rpstart=0&rpnum=0&islist=&querylist=&force=undefined",
+    "galleryBanner": {
+      "color": "#C80000",
+      "theme": "dark"
+	},
+	"license": "SEE LICENSE IN LICENSE.txt",
+	"homepage": "https://www.github.com/huangrichao2019/Solo-Learn",
+	"bugs": {
+		"url": "https://www.github.com/huangrichao2019/Solo-Learn/issues",
+		"email": "abidewithme@foxmail.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/huangrichao2019/Solo-Learn.git"
+	},
+	"keywords": ["gtouch","growingio","触达","运营工具","review"],
+	"activationEvents": [
+		"onCommand:extension.helloWorld",
+		"onCommand:extension.showTime"
+	],
+	"preview": true,
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"_func":"Hello World是激活事件，helloWorld是连接点，API func是激活事件",
+				"command": "extension.helloWorld",
+				"title": "Hello World"
+			},
+			{
+				"command": "extension.showTime",
+				"title":"Show Time"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^5.2.6",
+		"@types/node": "^10.12.21",
+		"@types/vscode": "^1.39.0",
+		"glob": "^7.1.4",
+		"mocha": "^6.1.4",
+		"typescript": "^3.3.1",
+		"tslint": "^5.12.1",
+		"vscode-test": "^1.2.0"
+	}
+}

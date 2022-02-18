@@ -1,0 +1,5 @@
+module.exports = {
+    'pathSrc': resolve('src'),
+      'pathUtils': resolve(`src/utils/`),
+       'pathApp': resolve(`src/app/`) 
+}

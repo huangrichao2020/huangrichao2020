@@ -1,0 +1,17 @@
+INFO  time: initialize in 0.51s
+WARN  no build tool detected in workspace '/Users/huangrichao/project/Learn/Solo-Learn'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+WARN  no build target: /Users/huangrichao/project/Learn/Solo-Learn/QuickScala/project/plugins.sbt
+WARN  no build target: /Users/huangrichao/project/Learn/Solo-Learn/QuickScala/build.sbt
+WARN  no build target: /Users/huangrichao/project/Learn/Solo-Learn/QuickScala/src/main/java/HelloWorld.scala
+WARN  no build target: /Users/huangrichao/project/Learn/Solo-Learn/QuickScala/src/main/java/chapt01/Greeting.scala
+INFO  shutting down Metals
+INFO  time: initialize in 0.57s
+WARN  no build tool detected in workspace '/System/Volumes/Data/Users/huangrichao/project/Learn/Solo-Learn'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+WARN  no build target: /System/Volumes/Data/Users/huangrichao/project/Learn/Solo-Learn/QuickScala/project/plugins.sbt
+WARN  no build target: /System/Volumes/Data/Users/huangrichao/project/Learn/Solo-Learn/QuickScala/build.sbt
+WARN  no build target: /System/Volumes/Data/Users/huangrichao/project/Learn/Solo-Learn/QuickScala/src/main/java/HelloWorld.scala
+WARN  no build target: /System/Volumes/Data/Users/huangrichao/project/Learn/Solo-Learn/QuickScala/src/main/java/chapt01/Greeting.scala
+?? 05, 2019 8:47:44 ?? org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+??: Unsupported notification method: $/setTraceNotification
+?? 05, 2019 10:31:33 ?? org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+??: Unsupported notification method: $/setTraceNotification

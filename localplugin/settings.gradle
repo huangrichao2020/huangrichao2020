@@ -1,0 +1,4 @@
+include ':MyPlugin'
+include ':MyPlugin'
+include ':app'
+rootProject.name = "local-plugin"

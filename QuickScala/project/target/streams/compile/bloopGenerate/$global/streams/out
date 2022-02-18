@@ -1,0 +1,4 @@
+[debug] [quickscala-build] Classpath dependencies List()
+[debug] [quickscala-build] Dependencies from configurations List()
+[debug] Bloop wrote the configuration of project 'quickscala-build' to '/Users/huangrichao/project/Learn/quickscala/project/.bloop/quickscala-build.json'
+[success] Generated .bloop/quickscala-build.json

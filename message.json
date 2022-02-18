@@ -1,0 +1,87 @@
+messages 
+shortMsg 短信
+campain 资源位
+
+{
+    "name": "推送20200423190737", "?name":"推送名",
+    "state": "draft", "?state":"draft | activated | stop",
+    "audienceType": "segment", "?au":"segment | tag | null",
+    "platform": "app", "?platform":"app | web | minp",
+    "type": "push", "?type":"push | popupWindow | banner",
+    "rule": {
+      "limit": 1, 
+      "productIds": [
+        "q9ApEpoW"
+      ],
+      "type": "system", "?type":"推送一定是system 且 action = pageOpen",
+      "startAt": 946656000000,
+      "endAt": 4102416000000,
+      "action": "pageOpen", "?ac":"pageOpen 推送 web弹窗 H5弹窗 | appOpen app弹窗 小程序弹窗",
+      "triggerPages": [], "?tr":"触发页面",
+      "triggerDelay": 0, "?de":"延迟设置",
+      "triggerCd": 86400, "?cd":"触发间隔",
+      "targets": [
+        {
+          "productId": "q9ApEpoW",
+          "type": "openApp", "?ty":"openApp | pageOpen | openH5",
+          "parameters": {},"?pa":"自定义协议",
+          "url": "com.growingio.minp?key1=111&key2=222"
+        }
+      ],
+      "triggerFilter": { "?tri":"触发事件",
+        "conditionExpr": "A1 || A2 && A3",
+        "conditions": [
+        {
+          "type": "event",  "?typ":"事件",
+          "alias": "A1", "?alias":"别名",
+          "key": "paySuccess", "?key":"事件key",
+          "measurementType": "custom",  "?mea":"埋点",
+          "aggregator": "count", "?ag":"聚合默认count",
+          "op": ">=", "?op":"表达式",
+          "valueType": "", 
+          "values": [
+            1
+          ],
+          "attribute": "",
+          "dimFiltersOp": "",
+          "dimFilters": []
+        },
+        {
+          "type": "event",
+          "alias": "A2",
+          "key": "appOpen",
+          "measurementType": "system",
+          "aggregator": "count",
+          "op": ">=",
+          "valueType": "int",
+          "values": [
+            1
+          ],
+          "attribute": "",
+          "dimFiltersOp": "",
+          "dimFilters": []
+        },
+      ]
+    },
+    "content": { "?content":"推送内容",
+      "style": {},
+      "components": [
+        {
+          "style": {},
+          "type": "caption",
+          "config": {
+            "text": "re"
+          }
+        },
+        {
+          "style": {},
+          "type": "paragraph",
+          "config": {
+            "text": "req"
+          }
+        }
+      ]
+    },
+    "audienceId": "usv:1P6jnZQP"
+  }
+}
