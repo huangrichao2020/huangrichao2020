@@ -1,7 +1,18 @@
-# skill-arsenal
+# pretty-skills 22 幕 talk 演示站
 
-> 22 幕 1-shot 演示站 · pretty-skills 讲解
-> 在线：<https://www.ai10088.com/skill-arsenal/>
+> **GitHub 源**：[huangrichao2020/huangrichao2020](https://github.com/huangrichao2020/huangrichao2020)
+> **在线部署**：<https://www.ai10088.com/skill-arsenal/>
+> **本地仓库**：`~/.mavis/knowledge/huangrichao2020/`
+
+## 3 个名字对应
+
+| 名字 | 在哪 | 是什么 |
+|---|---|---|
+| `huangrichao2020` | GitHub 仓库 / 本地目录 | git 源 |
+| `skill-arsenal` | 在线 URL / aliyun 目录 | nginx 部署路径 |
+| `pretty-skills-talk` | 历史名（已改） | 原 GitHub 仓库名 |
+
+`skill-arsenal` 是部署路径的命名约定，跟 git 源仓库名解耦——这样改 GitHub 仓库名不影响线上 URL。
 
 ## 这是什么
 
@@ -18,7 +29,7 @@ pretty-skills 仓库的线下分享 22 幕讲解站。从 P0 封面到 P22 skill
 ## 文件结构
 
 ```
-skill-arsenal/
+huangrichao2020/              # 仓库根目录
 ├── index.html              # 单文件 · 22 幕全在这里 · 直接编辑
 ├── speaker.jpg             # 汀池头像 · 99KB · 备用（未在主稿引用）
 ├── case-9grid/
