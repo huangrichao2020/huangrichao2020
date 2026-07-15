@@ -44,7 +44,7 @@ huangrichao2020/              # 仓库根目录
 直接改 `index.html`，每个 `<section class="slide" data-slide="N">` 是一幕。
 
 - 改完本地浏览器开 `index.html` 看效果
-- 推送后部署到 aliyun：`rsync -avz ./ aliyun:/www/wwwroot/skill-arsenal/`
+- 推送后部署到 aliyun：`rsync -avz --exclude='.git' --exclude='README.md' ./ aliyun:/www/wwwroot/skill-arsenal/`（README 是给 GitHub 看的，不进部署）
 
 ## 部署
 
