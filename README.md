@@ -1,5 +1,7 @@
 # pretty-skills 22 幕 talk 演示站
 
+![cover](./cover.jpg)
+
 > **GitHub 源**：[huangrichao2020/huangrichao2020](https://github.com/huangrichao2020/huangrichao2020)
 > **在线部署**：<https://www.ai10088.com/skill-arsenal/>
 > **本地仓库**：`~/.mavis/knowledge/huangrichao2020/`
