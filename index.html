@@ -1,0 +1,1467 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>比养 Agent 更重要的是养你的 skill 武器库</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --c-ink: #0A2540;
+  --c-paper: #FFFFFF;
+  --c-mist: #F4F6FA;
+  --c-fog: #E5E9F2;
+  --c-line: #D5DCE8;
+  --c-blue: #2563EB;
+  --c-blue-soft: #93C5FD;
+  --c-blue-50: #EFF6FF;
+  --c-gray: #6B7A99;
+  --c-warn: #DC2626;
+  --c-good: #059669;
+  --c-user: #1F2937;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100%; height: 100%;
+  background: var(--c-mist);
+  color: var(--c-ink);
+  font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+.stage {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #F4F6FA 0%, #E5E9F2 100%);
+}
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 50px 70px;
+  opacity: 0;
+  overflow: hidden;
+}
+.slide.active { display: flex; flex-direction: column; opacity: 1; }
+.slide-num {
+  position: absolute; top: 20px; right: 30px;
+  font-size: 13px; letter-spacing: 2px;
+  color: var(--c-gray); font-weight: 500;
+  z-index: 10;
+}
+.slide-num .total { color: var(--c-blue); font-weight: 700; }
+.h1 { font-size: 64px; font-weight: 800; line-height: 1.1; color: var(--c-ink); letter-spacing: -1.5px; }
+.h1 .accent { color: var(--c-blue); }
+.h2 { font-size: 42px; font-weight: 700; line-height: 1.15; color: var(--c-ink); margin-bottom: 14px; }
+.h2 .accent { color: var(--c-blue); }
+.h3 { font-size: 24px; font-weight: 600; line-height: 1.3; color: var(--c-ink); margin-bottom: 10px; }
+.sub { font-size: 20px; color: var(--c-gray); margin-top: 8px; font-weight: 400; }
+.body { font-size: 20px; line-height: 1.55; color: #1F2D4A; }
+.body-lg { font-size: 24px; line-height: 1.5; color: #1F2D4A; }
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--c-blue); color: #fff;
+  border-radius: 100px;
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 1px; margin-bottom: 12px;
+}
+.tag-gray { background: var(--c-fog); color: var(--c-gray); }
+.tag-red { background: var(--c-warn); }
+.tag-green { background: var(--c-good); }
+.tag-ink { background: var(--c-ink); }
+.card {
+  background: #fff;
+  border: 1px solid var(--c-line);
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 8px rgba(10, 37, 64, 0.04);
+}
+.card-grid { display: grid; gap: 16px; }
+.card-grid-2 { grid-template-columns: 1fr 1fr; }
+.card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.card-title { font-size: 18px; font-weight: 700; color: var(--c-ink); margin-bottom: 4px; }
+.card-desc { font-size: 14px; color: var(--c-gray); line-height: 1.5; }
+table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; font-size: 16px; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--c-line); }
+th { background: var(--c-fog); color: var(--c-ink); font-weight: 700; }
+tr:last-child td { border-bottom: none; }
+.bad { color: var(--c-warn); font-weight: 600; }
+.good { color: var(--c-good); font-weight: 600; }
+.accent { color: var(--c-blue); font-weight: 600; }
+.quote {
+  font-size: 28px; font-weight: 700; line-height: 1.3;
+  color: var(--c-ink); padding-left: 20px;
+  border-left: 5px solid var(--c-blue);
+}
+.quote-sm { font-size: 20px; font-weight: 700; line-height: 1.3; color: var(--c-ink); padding-left: 18px; border-left: 4px solid var(--c-blue); }
+.flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+.flow-node {
+  background: #fff; border: 2px solid var(--c-blue); color: var(--c-ink);
+  padding: 10px 18px; border-radius: 10px;
+  font-size: 16px; font-weight: 600;
+}
+.flow-arrow { font-size: 20px; color: var(--c-blue); font-weight: 800; }
+.flow-col { display: flex; flex-direction: column; gap: 6px; }
+.flow-col .flow-node { text-align: center; }
+.flow-col .flow-arrow { text-align: center; font-size: 16px; }
+.tree {
+  background: #0F1B2D; color: #C5D2E5;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 14px; line-height: 1.7;
+  border-radius: 10px; padding: 16px 20px;
+  white-space: pre; overflow: hidden;
+}
+.tree .d { color: #4A6FA5; }
+.tree .f { color: #fff; }
+.tree .g { color: #93C5FD; }
+.kbd {
+  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+  background: rgba(10, 37, 64, 0.8); color: #fff;
+  padding: 7px 16px; border-radius: 8px;
+  font-size: 12px; letter-spacing: 1px;
+  z-index: 100;
+}
+.bullet { list-style: none; }
+.bullet li { font-size: 18px; line-height: 1.55; padding-left: 24px; position: relative; margin-bottom: 8px; color: #1F2D4A; }
+.bullet li::before { content: ""; position: absolute; left: 0; top: 11px; width: 12px; height: 3px; background: var(--c-blue); border-radius: 2px; }
+.big-num { font-size: 80px; font-weight: 800; color: var(--c-blue); line-height: 1; letter-spacing: -2px; }
+.metric-row { display: flex; gap: 14px; }
+.metric { flex: 1; background: #fff; border: 1px solid var(--c-line); border-radius: 10px; padding: 14px; }
+.metric-num { font-size: 36px; font-weight: 800; color: var(--c-blue); line-height: 1; margin-bottom: 4px; }
+.metric-label { font-size: 12px; color: var(--c-gray); }
+.flex-row { display: flex; gap: 18px; }
+.flex-col { display: flex; flex-direction: column; gap: 12px; }
+.mt-8 { margin-top: 8px; } .mt-12 { margin-top: 12px; } .mt-16 { margin-top: 16px; } .mt-20 { margin-top: 20px; } .mt-24 { margin-top: 24px; } .mt-32 { margin-top: 32px; }
+.gap-grow { flex: 1; }
+.gun-icon {
+  width: 180px; height: 180px;
+  background: linear-gradient(135deg, #0A2540 0%, #2563EB 100%);
+  border-radius: 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 100px; margin: 0 auto 28px;
+  box-shadow: 0 16px 48px rgba(10, 37, 64, 0.3);
+}
+.tagline {
+  display: inline-block;
+  background: var(--c-ink); color: #fff;
+  padding: 8px 20px; border-radius: 100px;
+  font-size: 16px; font-weight: 500;
+}
+.tagline-blue { background: var(--c-blue); }
+.split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.section-title { font-size: 16px; font-weight: 700; color: var(--c-blue); letter-spacing: 1px; margin-bottom: 8px; }
+.cta-q { font-size: 32px; font-weight: 800; color: var(--c-ink); line-height: 1.3; margin-bottom: 12px; }
+.cta-q .accent { color: var(--c-blue); }
+.cta-q-num { font-size: 32px; font-weight: 800; color: var(--c-blue-soft); margin-right: 14px; }
+/* 架构图 */
+.arch-tile { background: #fff; border: 1px solid var(--c-line); border-radius: 6px; padding: 6px 10px; font-size: 11px; color: var(--c-ink); text-align: center; font-weight: 500; }
+.arch-tile-dark { background: rgba(147, 197, 253, 0.12); border: 1px solid rgba(147, 197, 253, 0.3); border-radius: 6px; padding: 6px 10px; font-size: 11px; color: #fff; text-align: center; font-weight: 500; }
+/* 演示图 */
+.demo-scene { transition: transform 0.2s ease; }
+.demo-scene:hover { transform: translateY(-2px); }
+/* 对话窗口 */
+.chat-window {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(10, 37, 64, 0.08);
+  border: 1px solid var(--c-line);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  max-height: 720px;
+}
+.chat-titlebar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 14px;
+  background: #F8FAFD;
+  border-bottom: 1px solid var(--c-line);
+}
+.chat-dot { width: 9px; height: 9px; border-radius: 50%; }
+.chat-dot.r { background: #FF5F57; }
+.chat-dot.y { background: #FEBC2E; }
+.chat-dot.g { background: #28C840; }
+.chat-title { margin-left: 10px; font-size: 11px; color: var(--c-gray); font-weight: 500; }
+.chat-body {
+  flex: 1; padding: 14px 18px;
+  overflow-y: auto;
+  background: #FAFBFD;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.bubble {
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 13px; line-height: 1.5;
+  word-break: break-word;
+  position: relative;
+}
+.bubble.user {
+  align-self: flex-end;
+  background: var(--c-blue);
+  color: #fff;
+  border-bottom-right-radius: 3px;
+}
+.bubble.mavis {
+  align-self: flex-start;
+  background: #fff;
+  color: var(--c-ink);
+  border: 1px solid var(--c-line);
+  border-bottom-left-radius: 3px;
+  box-shadow: 0 1px 2px rgba(10, 37, 64, 0.04);
+}
+.bubble.mavis .bubble-tag {
+  display: inline-block; font-size: 9px; font-weight: 700;
+  color: var(--c-blue); margin-right: 5px; letter-spacing: 0.5px;
+}
+.bubble-meta { font-size: 9px; color: var(--c-gray); margin-top: 3px; }
+.bubble.user .bubble-meta { color: rgba(255,255,255,0.7); text-align: right; }
+.bubble code {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  background: rgba(0,0,0,0.08);
+  padding: 0px 4px;
+  border-radius: 2px;
+}
+.bubble.mavis code { background: var(--c-fog); color: var(--c-blue); }
+.chat-input {
+  display: flex; gap: 6px;
+  padding: 8px 12px;
+  background: #fff;
+  border-top: 1px solid var(--c-line);
+}
+.chat-input-box {
+  flex: 1; background: var(--c-fog); border-radius: 6px;
+  padding: 6px 10px; font-size: 11px; color: var(--c-gray);
+}
+.chat-send {
+  background: var(--c-blue); color: #fff;
+  padding: 6px 12px; border-radius: 6px;
+  font-size: 11px; font-weight: 600;
+}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+
+<!-- ============== P0 封面 ============== -->
+<section class="slide" data-slide="0">
+  <div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+    <div class="gun-icon">⚔️</div>
+    <div class="h1" style="text-align:center;">比养 <span class="accent">Agent</span> 更重要的</div>
+    <div class="h1" style="text-align:center; margin-top: 10px;">是养你的 <span class="accent">skill 武器库</span></div>
+    <div class="sub" style="text-align:center; margin-top: 20px;">6 个月从 prompt 到 loop 的进化路径</div>
+    <div class="tagline" style="margin: 32px auto 0; display:block; text-align:center;">你养的不是 agent，是你的军火库</div>
+  </div>
+  <div class="slide-num"><span class="current">01</span> / <span class="total">22</span></div>
+</section>
+
+<section class="slide" data-slide="1">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag tag-red">痛点</span>
+    <div class="h2">所有人都在养 agent，但养错了</div>
+    <div class="sub" style="margin-top: 4px; color: var(--c-gray);">1 年过去了，你留下了什么？</div>
+    <div class="flex-row" style="margin-top: 16px; flex: 1;">
+      <!-- 左：你花时间在 -->
+      <div class="card" style="flex: 1; border-top: 4px solid var(--c-blue);">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+          <div style="background: var(--c-blue-50); color: var(--c-blue); padding: 4px 10px; border-radius: 100px; font-size: 12px; font-weight: 700;">你花时间在</div>
+          <div style="font-size: 12px; color: var(--c-gray);">看起来都在进步</div>
+        </div>
+        <ul class="bullet" style="margin-top: 4px;">
+          <li>每天写新 prompt 喂 AI（每个任务重新写）</li>
+          <li>调参数（这次对了，下次又不对）</li>
+          <li>换更好的模型（GPT-4 → Claude → Gemini）</li>
+          <li>每次都从 0 开始</li>
+        </ul>
+        <div style="margin-top: auto; padding-top: 12px; border-top: 1px dashed var(--c-line); font-size: 13px; color: var(--c-gray);">
+          <b style="color: var(--c-blue);">算下来 1 年：</b>
+          <span style="font-family: 'SF Mono', Menlo, monospace; color: var(--c-ink);">100+ prompt · 3 个模型 · N 次调参</span>
+        </div>
+      </div>
+      <!-- 右：但 1 年后 -->
+      <div class="card" style="flex: 1; border-color: var(--c-warn); background: #FEF2F2; border-top: 4px solid var(--c-warn);">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+          <div style="background: var(--c-warn); color: #fff; padding: 4px 10px; border-radius: 100px; font-size: 12px; font-weight: 700;">但 1 年后</div>
+          <div style="font-size: 12px; color: var(--c-gray);">啥也没攒下</div>
+        </div>
+        <ul class="bullet" style="margin-top: 4px;">
+          <li>100+ prompt → 找不到了</li>
+          <li>调好的参数 → 忘了，下次又调</li>
+          <li>换模型 → 之前的经验全废</li>
+          <li>从头来过 100 次</li>
+        </ul>
+        <div style="margin-top: auto; padding-top: 12px; border-top: 1px dashed #FCA5A5; font-size: 13px; color: var(--c-warn); font-weight: 600;">
+          净留存 = 0
+        </div>
+      </div>
+    </div>
+    <div class="quote mt-16" style="font-size: 32px;">
+      <span style="color: var(--c-gray);">agent = 一次性工具（用完即弃）</span>
+      <span style="color: var(--c-blue); font-weight: 800;">  ·  </span>
+      <span style="color: var(--c-ink); font-weight: 700;">skill = 越攒越多的资产</span>
+    </div>
+  </div>
+  <div class="slide-num"><span class="current">02</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P1.5 对话 1 ============== -->
+<section class="slide" data-slide="2">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <div class="h2">对话 1</div>
+    <div class="sub mt-8" style="margin-bottom: 14px;">用户让 Mavis 写 PPT · 改了 5 次</div>
+    <div class="chat-window" style="flex: 1; max-height: 720px;">
+      <div class="chat-titlebar">
+        <div class="chat-dot r"></div>
+        <div class="chat-dot y"></div>
+        <div class="chat-dot g"></div>
+        <div class="chat-title">Mavis Code · 演示项目</div>
+        <div class="chat-tabs" style="margin-left: 14px; display: flex; gap: 3px;">
+          <div style="padding: 3px 8px; background: var(--c-blue-50); color: var(--c-blue); border: 1px solid var(--c-blue-soft); border-radius: 5px; font-size: 10px;">skill-arsenal-talk</div>
+        </div>
+      </div>
+      <div class="chat-body">
+        <div class="bubble user">我周末有个分享，主题是"养 skill 武器库"，你帮我出个 8 幕大纲</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          好嘞，8 幕：P0 封面 · P1 痛点 · P2 总纲 · P3 范式 · P4 harness · P5 loop · P6 demo · P7 CTA
+          <div class="bubble-meta">3 分钟 · 草稿</div>
+        </div>
+        <div class="bubble user">P3 不对，再想想</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          改了，v2
+          <div class="bubble-meta">v2 · P3 改写</div>
+        </div>
+        <div class="bubble user">P5 数据不准，PASS 数量错</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          PASS 是 12/50，我之前写错了
+          <div class="bubble-meta">v3 · 数据修正</div>
+        </div>
+        <div class="bubble user">P6 节奏卡 1.5min 不够</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          v4，调到 2min
+          <div class="bubble-meta">v4 · 节奏调整</div>
+        </div>
+        <div class="bubble user">算了，我让你改了 5 次了，每次都从 0 写 ...</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          👀 看到第 5 次 · 这正是 skill / context 化的时机
+          <div class="bubble-meta">v5 · 触发 skill 化</div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <div class="chat-input-box">输入消息 ...</div>
+        <div class="chat-send">发送</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num"><span class="current">03</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P2 总纲 ============== -->
+<section class="slide" data-slide="3">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag">总纲</span>
+    <div class="h2">5 阶进化 + 1 旁支 · <span class="accent">context → skill</span></div>
+    <div class="flow mt-12" style="justify-content: center;">
+      <div class="flow-node start">Agent</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">Prompt</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">Context</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="background: var(--c-blue); color: #fff; border-color: var(--c-blue);">Skill</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">Harness</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node end">Loop</div>
+    </div>
+    <table class="mt-12" style="flex: 1;">
+      <thead>
+        <tr><th style="width: 14%;">概念</th><th style="width: 54%;">1 句话</th><th style="width: 12%;">何时出现</th><th>关键事件</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>Agent</b></td><td>跑任务的执行者 · 一次性的</td><td>起点</td><td style="color: var(--c-gray);">不在时间主轴上</td></tr>
+        <tr><td><b>Prompt</b></td><td>临时凑的脚手架 · 第一次写出能用的</td><td>2023</td><td style="color: var(--c-gray);">LLM API 开放 · ChatGPT 出圈</td></tr>
+        <tr style="background: var(--c-blue-50);"><td><b>Context</b></td><td>把 prompt 沉淀成可复用资产</td><td>2024</td><td style="color: var(--c-gray);">上下文窗口变长 · system prompt 出现</td></tr>
+        <tr style="background: var(--c-blue-50);"><td><b><span style="color: var(--c-blue);">Skill</span></b></td><td><b>把 context 进化成可分发武器</b></td><td><b>2025</b></td><td style="color: var(--c-gray);"><b>pretty-skills 仓库 · 12 领域</b></td></tr>
+        <tr><td><b>Harness</b></td><td>给 agent 装决策栈 + 评委 + 护栏 + 评分</td><td>2026 初</td><td style="color: var(--c-gray);">dream 修炼达尔文 v2 · 9 维评分</td></tr>
+        <tr><td><b>Loop</b></td><td>读场景 → 写手册 → 自动跑 → 人审 → 再用</td><td>2026 中</td><td style="color: var(--c-gray);">taste-skill 范式 + human-in-the-loop</td></tr>
+      </tbody>
+    </table>
+    <div style="display: flex; align-items: center; gap: 12px; margin-top: 10px; padding: 10px 14px; background: #F4F6FA; border: 2px dashed var(--c-gray); border-radius: 10px;">
+      <span style="display: inline-block; padding: 3px 10px; background: var(--c-gray); color: #fff; border-radius: 100px; font-size: 11px; font-weight: 700; letter-spacing: 1px; flex-shrink: 0;">2025 旁支</span>
+      <div style="font-size: 14px; color: var(--c-ink);">
+        <b style="color: var(--c-ink);">MCP</b> · 把"24 小时跑的能力"封装成可调用的服务
+        <span style="color: var(--c-gray); font-size: 12px; margin-left: 6px;">— 与 Skill 同年出现 · 走的是"持续在线"路线 · 不在主链 5 阶里</span>
+      </div>
+    </div>
+    <div class="quote-sm mt-12">prompt 是为了解决问题尝试干活 · <span class="accent">context → skill</span> 是稳定干活后总结出来的武器</div>
+  </div>
+  <div class="slide-num"><span class="current">04</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P3 范式 ============== -->
+<section class="slide" data-slide="4">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag">范式</span>
+    <div class="h2">从脚手架变武器</div>
+    <div class="split-2" style="margin-top: 12px; flex: 1;">
+      <div style="display:flex; flex-direction:column; justify-content:center;">
+        <div class="section-title" style="color: var(--c-warn);">脚手架 · prompt</div>
+        <ul class="bullet" style="margin-top: 10px;">
+          <li>第 3 次写同一个 prompt → 该提 context / skill</li>
+          <li>改 1 个 prompt 改到第 5 版 → 该入 context</li>
+          <li>解释"不是这个意思"3 遍 → 该沉淀反例</li>
+        </ul>
+        <div class="big-num mt-16" style="text-align:center;">× 5</div>
+        <div style="text-align:center; font-size: 16px; color: var(--c-gray);">prompt 写 5 遍</div>
+      </div>
+      <div style="display:flex; flex-direction:column; justify-content:center;">
+        <div class="section-title" style="color: var(--c-good);">武器 · skill</div>
+        <div style="background: #fff; border: 2px solid var(--c-good); border-radius: 12px; padding: 20px; margin-top: 10px;">
+          <div class="big-num" style="color: var(--c-good); text-align:center;">× 30</div>
+          <div style="text-align:center; font-size: 16px; color: var(--c-gray); margin-bottom: 14px;">1 个 skill 用 30 次</div>
+          <div style="font-size: 14px; color: var(--c-gray); border-top: 1px solid var(--c-fog); padding-top: 12px;">
+            真实案例 · <span class="accent">dashiai-ppt</span> · 一周 6 commit，从 v0 到 v3
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="quote mt-12">context 工程 = 把 agent 的失败变成你的资产</div>
+  </div>
+  <div class="slide-num"><span class="current">05</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P3.5 skill 是什么 ============== -->
+<section class="slide" data-slide="5">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag tag-ink">定义</span>
+    <div class="h2">skill 是什么 · 一个 <span class="accent">SKILL.md</span> 文件</div>
+    <div class="split-2 mt-16" style="flex: 1;">
+      <div style="display:flex; flex-direction:column; justify-content:center;">
+        <div class="section-title">3 句话说清</div>
+        <ul class="bullet" style="margin-top: 10px;">
+          <li><b>物理形态</b> · 一个 <code>SKILL.md</code> 文件 + frontmatter</li>
+          <li><b>装载方式</b> · agent 启动时 load 进来 · 像装 1 个"插件"</li>
+          <li><b>作用</b> · 把"提示词"变成"可复用的工作流"</li>
+        </ul>
+        <div class="card mt-12" style="background: var(--c-blue-50); border-color: var(--c-blue-soft);">
+          <div style="font-size: 14px; color: var(--c-ink); line-height: 1.55;">
+            <b style="color: var(--c-blue);">提示词</b> = 你跟 agent 说的话 · 1 次性 · 容易忘
+            <br><b style="color: var(--c-good);">skill / context</b> = 你写给 agent 看的说明书 · 可复用 · 不会忘
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column;">
+        <div class="section-title">真实 SKILL.md 长这样</div>
+        <div style="background: #0F1B2D; border-radius: 10px; padding: 16px 20px; font-family: 'SF Mono', Menlo, monospace; font-size: 12px; line-height: 1.6; color: #C5D2E5; flex: 1; overflow: hidden;">
+<span style="color: #93C5FD;">---</span>
+<span style="color: #fff;">name:</span> <span style="color: #93C5FD;">ai-image-to-pptx</span>
+<span style="color: #fff;">description:</span> 制作 PPT / 汇报材料时使用
+  · 5 步 pipeline · 6 商务科技主题
+<span style="color: #93C5FD;">---</span>
+<span style="color: #6B7A99;"># ai-image-to-pptx</span>
+
+<span style="color: #fff;">## 触发词</span>
+  · 做 PPT · 讲解图 · 出 .pptx
+
+<span style="color: #fff;">## 5 步 pipeline</span>
+  1. 选题  2. 风格  3. 配图
+  4. 排版  5. 导出
+
+<span style="color: #fff;">## 反模式</span>
+  - 不加风格默认 = 全白 PPT
+  - 不写认知锚点 = 图生完没重点
+  ...
+        </div>
+        <div style="font-size: 12px; color: var(--c-gray); margin-top: 8px; text-align: center;">
+          ↑ 这就是 1 个 skill · 60 行 · 装好就能用 30+ 次
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num"><span class="current">06</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P3.7 对话 2 ============== -->
+<section class="slide" data-slide="6">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <div class="h2">对话 2</div>
+    <div class="sub mt-8" style="margin-bottom: 14px;">用户问"能沉淀吗" · Mavis 教 3 步抽 skill</div>
+    <div class="chat-window" style="flex: 1; max-height: 720px;">
+      <div class="chat-titlebar">
+        <div class="chat-dot r"></div><div class="chat-dot y"></div><div class="chat-dot g"></div>
+        <div class="chat-title">Mavis Code · 演示项目</div>
+      </div>
+      <div class="chat-body">
+        <div class="bubble user">（接上）能不能别每次从 0 开始？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          这正是 skill / context 化的时机
+          <br>我帮你抽 3 步：
+          <br>① 找模板：<code>内容创作/ai-image-to-pptx</code>
+          <br>② 填字段：8 幕结构 + 4 阶进化图
+          <br>③ 入库：<code>pretty-skills v0.1</code>
+          <div class="bubble-meta">3 步 · context 工程</div>
+        </div>
+        <div class="bubble user">下次我直接说"用 ai-image-to-pptx 做 XX 主题"就行？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          对，下次 0 改稿直接出
+          <br>你以后说"用 ai-image-to-pptx 做 XX"，我自动套模板
+          <div class="bubble-meta">✓ context / skill 入库</div>
+        </div>
+        <div class="bubble user">那以前我让你改的 5 版大纲呢？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          已经入反模式黑名单
+          <br>下次自动避开这 5 个错
+          <div class="bubble-meta">✓ 反例沉淀</div>
+        </div>
+        <div class="bubble user">听起来挺简单，但我不记得 ps 命令</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          我帮你装好
+          <br><code>ps add ai-image-to-pptx</code> + <code>ps list</code> 查一下
+          <div class="bubble-meta">✓ 装好</div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <div class="chat-input-box">输入消息 ...</div>
+        <div class="chat-send">发送</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num"><span class="current">07</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P4 拐点 ============== -->
+<section class="slide" data-slide="7">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag tag-gray">拐点</span>
+    <div class="h2">3 个判断时机 · 到了就提 skill</div>
+    <div class="card-grid card-grid-3 mt-16" style="flex: 1;">
+      <div class="card" style="border-top: 4px solid var(--c-warn);">
+        <div style="font-size: 32px; font-weight: 800; color: var(--c-warn);">3</div>
+        <div class="card-title mt-8">第 3 次写同一个 prompt</div>
+        <div class="card-desc" style="margin-top: 6px;">说明这事不是一次性的 · 该提 context / skill</div>
+      </div>
+      <div class="card" style="border-top: 4px solid var(--c-warn);">
+        <div style="font-size: 32px; font-weight: 800; color: var(--c-warn);">5</div>
+        <div class="card-title mt-8">第 5 版还在改</div>
+        <div class="card-desc" style="margin-top: 6px;">脚手架已经压不住 · 该入 context</div>
+      </div>
+      <div class="card" style="border-top: 4px solid var(--c-warn);">
+        <div style="font-size: 32px; font-weight: 800; color: var(--c-warn);">3</div>
+        <div class="card-title mt-8">解释"不是这个意思"3 遍</div>
+        <div class="card-desc" style="margin-top: 6px;">反例没沉淀 · 该入反模式黑名单</div>
+      </div>
+    </div>
+    <div class="quote-sm mt-16">3 / 5 / 3 · 三次机会，没接住 = 这次机会也没了</div>
+  </div>
+  <div class="slide-num"><span class="current">08</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P5 harness 是什么 ============== -->
+<section class="slide" data-slide="8">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag tag-ink">概念</span>
+    <div class="h2">harness 是什么</div>
+    <div class="card-grid card-grid-4 mt-16" style="flex: 1;">
+      <div class="card">
+        <div style="font-size: 36px;">🎯</div>
+        <div class="card-title mt-6">决策栈</div>
+        <div class="card-desc">每一步走什么、怎么走、不走会怎样</div>
+      </div>
+      <div class="card">
+        <div style="font-size: 36px;">⚖️</div>
+        <div class="card-title mt-6">评委</div>
+        <div class="card-desc">谁打分 · 多个评委 = 不靠 LLM 单点</div>
+      </div>
+      <div class="card">
+        <div style="font-size: 36px;">🛡️</div>
+        <div class="card-title mt-6">护栏</div>
+        <div class="card-desc">高风险行动黑名单 · 不可越界</div>
+      </div>
+      <div class="card">
+        <div style="font-size: 36px;">📊</div>
+        <div class="card-title mt-6">评分</div>
+        <div class="card-desc">9 维评分 · 自迭代 = 越用越好</div>
+      </div>
+    </div>
+    <div class="quote-sm mt-16">harness 不是给你跑的，是给 agent 跑的</div>
+  </div>
+  <div class="slide-num"><span class="current">09</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P6 9 维评分 ============== -->
+<section class="slide" data-slide="9">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag tag-gray">数据</span>
+    <div class="h2">9 维评分 · dream 修炼达尔文 v2</div>
+    <div class="flex-row" style="margin-top: 10px; flex: 1;">
+      <div style="flex: 1.5;">
+        <table>
+          <thead>
+            <tr><th style="width: 6%;">#</th><th>维度</th><th style="width: 16%;">基线</th><th>优化目标</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>失败模式编码</td><td class="bad">3/10</td><td class="good">8/10</td></tr>
+            <tr><td>2</td><td>可执行具体性</td><td>6/10</td><td class="good">8/10</td></tr>
+            <tr><td>3</td><td>高风险行动黑名单</td><td class="bad">2/10</td><td class="good">9/10</td></tr>
+            <tr><td>4</td><td>4 件套完整度</td><td class="bad">3/10</td><td class="good">7/10</td></tr>
+            <tr><td>5</td><td>锦绣素材</td><td class="bad">1/10</td><td class="good">6/10</td></tr>
+            <tr><td>6</td><td>跨 agent 兼容性</td><td>5/10</td><td class="good">7/10</td></tr>
+            <tr><td>7</td><td>实战验证</td><td class="bad">3/10</td><td class="good">7/10</td></tr>
+            <tr><td>8</td><td>内容数据支撑</td><td>5/10</td><td class="good">8/10</td></tr>
+            <tr><td>9</td><td>维护者活跃度</td><td class="good">8/10</td><td class="good">9/10</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
+        <div class="card" style="border-color: var(--c-ink); background: var(--c-ink); color: #fff;">
+          <div class="card-title" style="color: var(--c-blue-soft);">self-improving-agent v2</div>
+          <div style="display:flex; gap: 12px; margin-top: 10px;">
+            <div style="flex: 1; background: rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; text-align:center;">
+              <div style="font-size: 32px; font-weight: 800; color: var(--c-gray);">4.0</div>
+              <div style="font-size: 11px; color: var(--c-blue-soft);">v1 基线</div>
+            </div>
+            <div style="flex: 1; background: rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; text-align:center;">
+              <div style="font-size: 32px; font-weight: 800; color: var(--c-good);">7.7</div>
+              <div style="font-size: 11px; color: var(--c-blue-soft);">v2 优化后</div>
+            </div>
+          </div>
+          <div style="text-align:center; margin-top: 8px; font-size: 13px; color: var(--c-blue-soft);">7 天 +3.7 涨分</div>
+        </div>
+      </div>
+    </div>
+    <div class="quote-sm mt-12">每条 commit 走一遍 9 维 · 涨分才有意义</div>
+  </div>
+  <div class="slide-num"><span class="current">10</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P6.5 对话 3 ============== -->
+<section class="slide" data-slide="10">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <div class="h2">对话 3</div>
+    <div class="sub mt-8" style="margin-bottom: 14px;">用户问"失败怎么记" · Mavis 亮 9 维评分</div>
+    <div class="chat-window" style="flex: 1; max-height: 720px;">
+      <div class="chat-titlebar">
+        <div class="chat-dot r"></div><div class="chat-dot y"></div><div class="chat-dot g"></div>
+        <div class="chat-title">Mavis Code · 演示项目</div>
+      </div>
+      <div class="chat-body">
+        <div class="bubble user">你修了几次？每次失败都记吗？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          9 维评分 + 多评委 + validation 回滚
+          <br><code>dream-log.md</code> 368 行 · 每条 commit 都标了根因
+          <div class="bubble-meta">3 件套</div>
+        </div>
+        <div class="bubble user">9 维是啥？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          [亮 9 维评分表]
+          <br>1. 失败模式编码 3→8
+          <br>2. 可执行具体性 6→8
+          <br>3. 高风险行动黑名单 2→9
+          <br>4. 4 件套完整度 3→7
+          <br>5. 锦绣素材 1→6
+          <br>6. 跨 agent 兼容性 5→7
+          <br>7. 实战验证 3→7
+          <br>8. 内容数据支撑 5→8
+          <br>9. 维护者活跃度 8→9
+          <div class="bubble-meta">v1 → v2 · +3.7 涨分</div>
+        </div>
+        <div class="bubble user">所以你每次失败都会修？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          不会 · 9 维涨分才修
+          <br>不涨分 = 不入库 = 白修
+          <div class="bubble-meta">validation 回滚</div>
+        </div>
+        <div class="bubble user">听起来好严，不累吗？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          第 1 周累 · 第 4 周同类错 0 次
+          <br>第 8 周新 case 跑一遍 = PASS
+          <div class="bubble-meta">✓ loop 跑通</div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <div class="chat-input-box">输入消息 ...</div>
+        <div class="chat-send">发送</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num"><span class="current">11</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P7 反面 ============== -->
+<section class="slide" data-slide="11">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag tag-red">反例</span>
+    <div class="h2">harness 反面 · 靠 LLM 当裁判的 3 个坑</div>
+    <div class="card-grid card-grid-3 mt-16" style="flex: 1;">
+      <div class="card" style="border-top: 4px solid var(--c-warn);">
+        <div style="font-size: 32px;">🐢</div>
+        <div class="card-title mt-6">慢</div>
+        <div class="card-desc">LLM 跑 1 轮 = 几秒到几十秒，循环里叠加就是分钟级</div>
+      </div>
+      <div class="card" style="border-top: 4px solid var(--c-warn);">
+        <div style="font-size: 32px;">🎲</div>
+        <div class="card-title mt-6">不可控</div>
+        <div class="card-desc">温度 0 也会漂 · 同输入可能出不同评分</div>
+      </div>
+      <div class="card" style="border-top: 4px solid var(--c-warn);">
+        <div style="font-size: 32px;">💥</div>
+        <div class="card-title mt-6">单点失败</div>
+        <div class="card-desc">token 限流 / API 挂 / 上下文爆 = 整个 loop 停</div>
+      </div>
+    </div>
+    <div class="quote-sm mt-16">单一 LLM 评分 = 看似自动 = 实际脆弱</div>
+  </div>
+  <div class="slide-num"><span class="current">12</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P8 正面 ============== -->
+<section class="slide" data-slide="12">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag tag-green">正例</span>
+    <div class="h2">harness 正面 · dream 修炼达尔文 v2</div>
+    <div class="split-2 mt-16" style="flex: 1;">
+      <div class="card" style="border-top: 4px solid var(--c-good);">
+        <div class="section-title" style="color: var(--c-good);">4 件套</div>
+        <ul class="bullet" style="margin-top: 10px;">
+          <li>9 维评分（量化）</li>
+          <li>多评委（不靠 LLM 单点）</li>
+          <li>validation 回滚（涨分才入库）</li>
+          <li>反模式黑名单（防同类错）</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top: 4px solid var(--c-good);">
+        <div class="section-title" style="color: var(--c-good);">自迭代流程</div>
+        <div class="flow-col mt-8">
+          <div class="flow-node" style="text-align:center;">跑 1 次任务</div>
+          <div class="flow-arrow" style="text-align:center;">↓</div>
+          <div class="flow-node" style="text-align:center;">9 维评分</div>
+          <div class="flow-arrow" style="text-align:center;">↓</div>
+          <div class="flow-node" style="text-align:center;">涨分？→ 入库</div>
+          <div class="flow-arrow" style="text-align:center;">↓</div>
+          <div class="flow-node end" style="text-align:center;">下次跑 = 涨了</div>
+        </div>
+      </div>
+    </div>
+    <div class="quote-sm mt-12">harness = 把"我也觉得"换成"9 维 + 多评委 + 回滚"</div>
+  </div>
+  <div class="slide-num"><span class="current">13</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P8.5 架构图 ============== -->
+<section class="slide" data-slide="13">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag" style="background: linear-gradient(135deg, #0A2540 0%, #2563EB 100%);">架构</span>
+    <div class="h2">pretty-skills · <span class="accent">3 层架构 + 真实证据</span></div>
+    <div class="sub mt-8" style="margin-bottom: 12px;">内容层用方法论层连接工具层 · 跟其他 skill 库最大的区别</div>
+    <div style="flex: 1; display: flex; gap: 14px; padding: 4px 0;">
+      <!-- 左侧：3 层架构 -->
+      <div style="flex: 1.2; display: flex; flex-direction: column; gap: 6px;">
+        <!-- L1 内容层 -->
+        <div style="background: linear-gradient(135deg, #FFFFFF 0%, #F4F6FA 100%); border: 2px solid var(--c-blue); border-radius: 10px; padding: 10px 14px; box-shadow: 0 3px 12px rgba(37, 99, 235, 0.10);">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="background: var(--c-blue); color: #fff; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; letter-spacing: 1px;">L1</div>
+            <div style="font-size: 14px; font-weight: 700; color: var(--c-ink);">内容层</div>
+            <div style="font-size: 11px; color: var(--c-gray);">16 领域 × 62 case · 12 PASS</div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin-top: 6px;">
+            <div class="arch-tile">Agent知识</div>
+            <div class="arch-tile">视觉创作</div>
+            <div class="arch-tile">内容创作</div>
+            <div class="arch-tile">金融投资</div>
+            <div class="arch-tile">编程开发</div>
+            <div class="arch-tile">做事技巧</div>
+            <div class="arch-tile">玄学修炼</div>
+            <div class="arch-tile" style="background: var(--c-blue-50); color: var(--c-blue); font-weight: 700;">+10 领域</div>
+          </div>
+          <div style="font-size: 10px; color: var(--c-gray); margin-top: 4px;">每个领域：case / SKILL.md / content.md / 锦绣/</div>
+        </div>
+        <!-- 中间连接线 -->
+        <div style="display: flex; justify-content: center; margin: -1px 0;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 2px; height: 8px; background: var(--c-blue);"></div>
+            <div style="font-size: 9px; color: var(--c-blue); font-weight: 600;">↑↓ 沉淀 / 抽取</div>
+          </div>
+        </div>
+        <!-- L2 方法论层 -->
+        <div style="background: linear-gradient(135deg, #0A2540 0%, #1E3A5F 100%); border: 2px solid var(--c-blue-soft); border-radius: 10px; padding: 10px 14px; box-shadow: 0 3px 12px rgba(10, 37, 64, 0.20); position: relative;">
+          <div style="position: absolute; top: -7px; right: 14px; background: var(--c-blue); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 9px; font-weight: 700; letter-spacing: 1px;">核心</div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="background: var(--c-blue-soft); color: var(--c-ink); padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; letter-spacing: 1px;">L2</div>
+            <div style="font-size: 14px; font-weight: 700; color: #fff;">方法论层</div>
+            <div style="font-size: 11px; color: var(--c-blue-soft);">3F 校验 + dream-log + 自迭代</div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 6px;">
+            <div class="arch-tile-dark">check-3f.py</div>
+            <div class="arch-tile-dark">9 维评分</div>
+            <div class="arch-tile-dark">多评委</div>
+            <div class="arch-tile-dark">validation 回滚</div>
+          </div>
+          <div style="font-size: 10px; color: var(--c-blue-soft); margin-top: 4px;">dream-log.md 每天 23:00 复盘 · 368 行 · 这是其他 skill 库没有的层</div>
+        </div>
+        <!-- 中间连接线 -->
+        <div style="display: flex; justify-content: center; margin: -1px 0;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 2px; height: 8px; background: var(--c-blue);"></div>
+            <div style="font-size: 9px; color: var(--c-blue); font-weight: 600;">↑↓ 调用 / 反馈</div>
+          </div>
+        </div>
+        <!-- L3 工具层 -->
+        <div style="background: linear-gradient(135deg, #FFFFFF 0%, #F4F6FA 100%); border: 2px solid var(--c-blue); border-radius: 10px; padding: 10px 14px; box-shadow: 0 3px 12px rgba(37, 99, 235, 0.10);">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="background: var(--c-blue); color: #fff; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; letter-spacing: 1px;">L3</div>
+            <div style="font-size: 14px; font-weight: 700; color: var(--c-ink);">工具层</div>
+            <div style="font-size: 11px; color: var(--c-gray);">ps CLI + skill-creator · 10 个子命令</div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 6px;">
+            <div class="arch-tile">ps add</div>
+            <div class="arch-tile">ps create</div>
+            <div class="arch-tile">ps list</div>
+            <div class="arch-tile">ps contribute</div>
+            <div class="arch-tile">ps doctor</div>
+            <div class="arch-tile">ps graph</div>
+            <div class="arch-tile">ps info</div>
+            <div class="arch-tile">ps update</div>
+            <div class="arch-tile">ps rm</div>
+            <div class="arch-tile" style="background: var(--c-blue-50); color: var(--c-blue); font-weight: 700;">+ skill-creator</div>
+          </div>
+          <div style="font-size: 10px; color: var(--c-gray); margin-top: 4px;">CLI = 跟方法论层对话的入口</div>
+        </div>
+      </div>
+      <!-- 右侧：真实证据面板 -->
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+        <div style="background: linear-gradient(135deg, #FFFFFF 0%, #F4F6FA 100%); border: 2px solid var(--c-good); border-radius: 10px; padding: 10px 12px; box-shadow: 0 3px 12px rgba(5, 150, 105, 0.10);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <div style="background: var(--c-good); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700;">L1 真实</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--c-ink);">case 文件树 · 视觉创作/PPT证据链战法/</div>
+          </div>
+          <div class="tree" style="font-size: 10px; line-height: 1.55; padding: 8px 12px; border-radius: 6px;"><span class="d">~/knowledge/pretty-skills/视觉创作/PPT证据链战法/</span>
+<span class="f">├──</span> <span class="g">content.md</span>          <span class="d"># 7 页 × 7 字段</span>
+<span class="f">├──</span> <span class="g">web.html</span>            <span class="d"># 翻页演示</span>
+<span class="f">├──</span> <span class="g">images/</span>             <span class="d"># 7 张 PNG · 1280×720</span>
+<span class="f">├──</span> <span class="g">锦绣/</span>               <span class="d"># 横屏+竖屏 cover + slides</span>
+<span class="f">├──</span> <span class="g">manifest.json</span>       <span class="d"># domain=视觉创作 · visibility=public</span>
+<span class="f">└──</span> <span class="g">PPT证据链战法讲解.pdf</span>  <span class="d"># 7 image object · 413KB</span></div>
+        </div>
+        <div style="background: linear-gradient(135deg, #0A2540 0%, #1E3A5F 100%); border: 2px solid var(--c-blue-soft); border-radius: 10px; padding: 10px 12px; box-shadow: 0 3px 12px rgba(10, 37, 64, 0.20); position: relative;">
+          <div style="position: absolute; top: -7px; right: 14px; background: var(--c-blue); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 9px; font-weight: 700; letter-spacing: 1px;">L2 真实</div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <div style="background: var(--c-blue-soft); color: var(--c-ink); padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700;">L2 真实</div>
+            <div style="font-size: 12px; font-weight: 700; color: #fff;">dream-log.md · 2026-07-12 真实片段</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); color: #C5D2E5; font-family: 'SF Mono', Menlo, monospace; font-size: 10px; line-height: 1.55; padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--c-blue-soft);">
+            <div style="color: #93C5FD;">## 2026-07-12（每日 dream 修炼自动化）</div>
+            <div><span style="color: #6B7A99;">沉淀：</span>新建 <span style="color: #fff;">视觉创作/PPT证据链战法</span></div>
+            <div><span style="color: #6B7A99;">       content.md (7页×7字段) + web.html + 7 PNG</span></div>
+            <div><span style="color: #6B7A99;">3F 校验：</span><span style="color: #4ADE80;">check-3f.py → EXIT=0</span> <span style="color: #6B7A99;">(F1/F3/对齐/真实性/manifest 全过)</span></div>
+            <div><span style="color: #6B7A99;">INDEX.md：</span>case 计数 12 → 13</div>
+            <div style="margin-top: 4px; color: #6B7A99;">## 2026-07-13（每日 dream 修炼自动化）</div>
+            <div><span style="color: #6B7A99;">结论：今日无新增沉淀（无对话/无 commit/无文件改动）</span></div>
+            <div><span style="color: #6B7A99;">健康快检：</span>14 case 跑 check-3f → <span style="color: #4ADE80;">13 PASS / 1 FAIL</span></div>
+            <div><span style="color: #6B7A99;">FAIL：视觉创作/dashiai-ppt</span></div>
+            <div><span style="color: #6B7A99;">  （portrait 768×1376 vs check 假设冲突，</span></div>
+            <div><span style="color: #6B7A99;">   属 check-3f 设计盲点，非本次范围）</span></div>
+          </div>
+        </div>
+        <div style="background: linear-gradient(135deg, #FFFFFF 0%, #F4F6FA 100%); border: 2px solid var(--c-blue); border-radius: 10px; padding: 10px 12px; box-shadow: 0 3px 12px rgba(37, 99, 235, 0.10);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <div style="background: var(--c-blue); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700;">L3 真实</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--c-ink);">ps doctor · 真实输出</div>
+          </div>
+          <div style="background: var(--c-ink); color: var(--c-blue-soft); font-family: 'SF Mono', Menlo, monospace; font-size: 10px; line-height: 1.55; padding: 8px 12px; border-radius: 6px;">
+            <div><span style="color: #fff;">$ ps doctor</span></div>
+            <div><span style="color: #4ADE80;">✓</span> 16 领域已装  · 62 case 已注册</div>
+            <div><span style="color: #4ADE80;">✓</span> check-3f.py 在 PATH</div>
+            <div><span style="color: #4ADE80;">✓</span> dream-log.md 368 行 · 今日 23:00 cron 已就位</div>
+            <div><span style="color: #FACC15;">⚠</span> 1 case FAIL: 视觉创作/dashiai-ppt（设计盲点）</div>
+            <div><span style="color: #93C5FD;">→</span> 总分 4.0 / 7.7（达尔文 v2 后）</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="quote-sm mt-8">3 层架构 = 16 领域有方法论撑 · 方法论有 CLI 跑 · 真实证据看得见</div>
+  </div>
+  <div class="slide-num"><span class="current">14</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P9 数据 ============== -->
+<section class="slide" data-slide="14">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag">数据</span>
+    <div class="h2">pretty-skills · 7 天 122 commits</div>
+    <div class="metric-row mt-12">
+      <div class="metric">
+        <div class="metric-num">16</div>
+        <div class="metric-label">领域</div>
+      </div>
+      <div class="metric">
+        <div class="metric-num">62</div>
+        <div class="metric-label">case</div>
+      </div>
+      <div class="metric">
+        <div class="metric-num">122</div>
+        <div class="metric-label">commits · 7 天</div>
+      </div>
+      <div class="metric" style="background: var(--c-ink); border-color: var(--c-ink);">
+        <div class="metric-num" style="color: var(--c-blue-soft);">12<span style="font-size: 18px; color: #fff;">/50</span></div>
+        <div class="metric-label" style="color: var(--c-blue-soft);">3F PASS · 24%</div>
+      </div>
+    </div>
+    <div class="flex-row mt-12" style="flex: 1;">
+      <div style="flex: 1; display:flex; flex-direction:column;">
+        <div class="section-title">16 领域目录树 · 真实 `ls` 输出</div>
+        <div class="tree" style="flex: 1;"><span class="d">~/knowledge/pretty-skills/</span>
+<span class="f">├──</span> <span class="g">产品设计</span>
+<span class="f">├──</span> <span class="g">做事技巧</span>           <span class="d"># 11 case</span>
+<span class="f">├──</span> <span class="g">内容创作</span>           <span class="d"># 9 case</span>
+<span class="f">├──</span> <span class="g">商业运营</span>           <span class="d"># 2 case</span>
+<span class="f">├──</span> <span class="g">情感领域</span>
+<span class="f">├──</span> <span class="g">故事写作</span>
+<span class="f">├──</span> <span class="g">教育学习</span>
+<span class="f">├──</span> <span class="g">数据科学</span>
+<span class="f">├──</span> <span class="g">橙皮书</span>
+<span class="f">├──</span> <span class="g">游戏玩家</span>
+<span class="f">├──</span> <span class="g">玄学修炼</span>           <span class="d"># 3 case · 1 PASS</span>
+<span class="f">├──</span> <span class="g">社交主导</span>
+<span class="f">├──</span> <span class="g">编程开发</span>           <span class="d"># 4 case · 2 PASS</span>
+<span class="f">├──</span> <span class="g">金融投资</span>           <span class="d"># 10 case · 3 PASS</span>
+<span class="f">├──</span> <span class="g">视觉创作</span>           <span class="d"># 15 case · 1 PASS</span>
+<span class="f">└──</span> <span class="g">Agent知识</span>          <span class="d"># 6 case · 4 PASS</span></div>
+      </div>
+      <div style="flex: 1; display:flex; flex-direction:column; gap: 10px;">
+        <div class="card">
+          <div class="section-title">为什么 7 天做到 122 commits</div>
+          <ul class="bullet" style="margin-top: 8px;">
+            <li>每天 dream-log 复盘 = 1 天 17+ commit</li>
+            <li>9 维评分跑 case = PASS 涨分</li>
+            <li>反例 → 反模式黑名单 → 同类错不再犯</li>
+          </ul>
+        </div>
+        <div class="card" style="background: var(--c-blue-50); border-color: var(--c-blue-soft);">
+          <div class="section-title">loop 真在跑</div>
+          <div style="font-size: 13px; color: var(--c-ink); margin-top: 6px;">
+            <code style="background:#fff; padding: 1px 5px; border-radius:3px; color: var(--c-blue);">dream-log.md</code> 368 行
+            · 每条 commit 都标了根因
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num"><span class="current">15</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P9.5 演示图 3 场景 ============== -->
+<section class="slide" data-slide="15">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag" style="background: linear-gradient(135deg, #0A2540 0%, #2563EB 100%);">运转</span>
+    <div class="h2">pretty-skills · <span class="accent">3 个状态下怎么工作（真实命令）</span></div>
+    <div class="sub mt-8" style="margin-bottom: 12px;">对话时匹配 · 干活时执行 · 修炼时迭代</div>
+    <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; align-content: center;">
+      <!-- 场景 1 · 对话时 -->
+      <div class="demo-scene" style="background: linear-gradient(135deg, #FFFFFF 0%, #F4F6FA 100%); border: 2px solid var(--c-blue); border-radius: 12px; padding: 16px 18px; box-shadow: 0 4px 16px rgba(37, 99, 235, 0.10); display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="background: var(--c-blue); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px;">💬</div>
+          <div>
+            <div style="font-size: 16px; font-weight: 700; color: var(--c-ink);">对话时</div>
+            <div style="font-size: 11px; color: var(--c-gray);">场景 1 · 匹配 · 16 领域自动定位</div>
+          </div>
+        </div>
+        <div style="background: var(--c-blue); color: #fff; padding: 8px 12px; border-radius: 10px; border-bottom-right-radius: 3px; font-size: 13px; align-self: flex-end; max-width: 85%;">
+          我要做一个公众号排版
+        </div>
+        <div style="background: #fff; color: var(--c-ink); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--c-line); border-bottom-left-radius: 3px; font-size: 13px; align-self: flex-start; max-width: 85%;">
+          <div style="color: var(--c-blue); font-weight: 700; font-size: 10px; margin-bottom: 2px;">Mavis</div>
+          触发 <code style="background: var(--c-fog); padding: 1px 5px; border-radius: 3px; color: var(--c-blue); font-size: 11px;">ps list</code> 找匹配
+        </div>
+        <!-- 真实 ps list 输出 -->
+        <div style="background: var(--c-ink); color: var(--c-blue-soft); font-family: 'SF Mono', Menlo, monospace; font-size: 11px; line-height: 1.65; padding: 10px 12px; border-radius: 6px;">
+          <div><span style="color: #fff;">$</span> ps list --match "公众号排版"</div>
+          <div><span style="color: #4ADE80;">✓</span> <span style="color: #fff;">视觉创作/gzh-design</span>          <span style="color: #6B7A99;">(score 0.92)</span></div>
+          <div><span style="color: #4ADE80;">✓</span> <span style="color: #fff;">内容创作/公众号爆款操盘术</span>   <span style="color: #6B7A99;">(score 0.81)</span></div>
+          <div style="color: #6B7A99;">  命中 2/62 · 自动加载 gzh-design 7 主题</div>
+        </div>
+        <div style="background: var(--c-blue-50); border: 1px dashed var(--c-blue-soft); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--c-ink);">
+          <b style="color: var(--c-blue);">↓ 16 领域自动匹配</b> · 命中 → 加载 SKILL.md
+        </div>
+        <div style="font-size: 11px; color: var(--c-blue); text-align: center; font-weight: 600; padding-top: 4px; border-top: 1px solid var(--c-line);">对话 ↔ 库匹配</div>
+      </div>
+      <!-- 场景 2 · 干活时 -->
+      <div class="demo-scene" style="background: linear-gradient(135deg, #FFFFFF 0%, #F4F6FA 100%); border: 2px solid var(--c-good); border-radius: 12px; padding: 16px 18px; box-shadow: 0 4px 16px rgba(5, 150, 105, 0.10); display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="background: var(--c-good); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px;">⚙️</div>
+          <div>
+            <div style="font-size: 16px; font-weight: 700; color: var(--c-ink);">干活时</div>
+            <div style="font-size: 11px; color: var(--c-gray);">场景 2 · 执行 · 5 步 pipeline</div>
+          </div>
+        </div>
+        <!-- 真实 5 步 pipeline 命令 -->
+        <div style="background: var(--c-ink); color: var(--c-blue-soft); font-family: 'SF Mono', Menlo, monospace; font-size: 11px; line-height: 1.65; padding: 10px 12px; border-radius: 6px;">
+          <div><span style="color: #fff;">$</span> Mavis run skill <span style="color: #fff;">gzh-design</span> \</div>
+          <div>    --input "公众号排版"</div>
+          <div style="color: #6B7A99;">  1. 选题   → 5 主题骨架</div>
+          <div style="color: #6B7A99;">  2. 风格   → 商务科技蓝白灰</div>
+          <div style="color: #6B7A99;">  3. 配图   → 4 张（封面+插图）</div>
+          <div style="color: #6B7A99;">  4. 排版   → 锦绣 7 主题</div>
+          <div style="color: #6B7A99;">  5. 导出   → 公众号文章.md</div>
+          <div style="margin-top: 2px;"><span style="color: #4ADE80;">✓</span> <span style="color: #fff;">5/5 PASS · 18.4s</span></div>
+        </div>
+        <div style="background: #ECFDF5; border: 1px dashed #6EE7B7; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--c-ink);">
+          <b style="color: var(--c-good);">↓ skill 走完 5 步</b> · 自动 0 返工
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--c-good); border-radius: 8px; color: #fff; font-weight: 600; font-size: 13px;">
+          <span style="background: #fff; color: var(--c-good); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</span>
+          输出 · 公众号文章.md
+        </div>
+        <div style="font-size: 11px; color: var(--c-good); text-align: center; font-weight: 600; padding-top: 4px; border-top: 1px solid #D1FAE5;">skill → 工具调用</div>
+      </div>
+      <!-- 场景 3 · 修炼时 -->
+      <div class="demo-scene" style="background: linear-gradient(135deg, #0A2540 0%, #1E3A5F 100%); border: 2px solid var(--c-blue-soft); border-radius: 12px; padding: 16px 18px; box-shadow: 0 4px 16px rgba(10, 37, 64, 0.20); display: flex; flex-direction: column; gap: 10px; color: #fff;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="background: var(--c-blue-soft); color: var(--c-ink); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px;">🌙</div>
+          <div>
+            <div style="font-size: 16px; font-weight: 700; color: #fff;">修炼时</div>
+            <div style="font-size: 11px; color: var(--c-blue-soft);">场景 3 · 迭代 · 23:00 自动复盘</div>
+          </div>
+        </div>
+        <!-- 真实 check-3f.py 输出 -->
+        <div style="background: rgba(0,0,0,0.35); color: var(--c-blue-soft); font-family: 'SF Mono', Menlo, monospace; font-size: 11px; line-height: 1.65; padding: 10px 12px; border-radius: 6px; border-left: 2px solid var(--c-blue-soft);">
+          <div><span style="color: #fff;">$</span> 23:00 cron → check-3f.py</div>
+          <div style="color: #6B7A99;">  扫描 14 case 含 *讲解.pdf ...</div>
+          <div><span style="color: #4ADE80;">✓</span> PASS (13):</div>
+          <div style="color: #C5D2E5;">  Agent知识×4 · 内容创作×2 ·</div>
+          <div style="color: #C5D2E5;">  玄学×1 · 编程×2 · 视觉×1 · 金融×3</div>
+          <div><span style="color: #FACC15;">⚠</span> FAIL (1): 视觉创作/dashiai-ppt</div>
+          <div style="color: #6B7A99;">  (portrait vs check 假设冲突 · 设计盲点)</div>
+          <div style="color: #fff; margin-top: 2px;">→ dream-log.md 写入今日复盘</div>
+        </div>
+        <div style="background: rgba(147, 197, 253, 0.12); border: 1px dashed var(--c-blue-soft); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--c-blue-soft);">
+          <b style="color: #fff;">↓ 涨分才入库</b> · 反模式进黑名单
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--c-blue-soft); border-radius: 8px; color: var(--c-ink); font-weight: 600; font-size: 13px;">
+          <span style="background: var(--c-ink); color: var(--c-blue-soft); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</span>
+          新版 · skill v2 入库
+        </div>
+        <div style="font-size: 11px; color: var(--c-blue-soft); text-align: center; font-weight: 600; padding-top: 4px; border-top: 1px solid rgba(147, 197, 253, 0.2);">复盘 → 库迭代</div>
+      </div>
+    </div>
+    <div class="quote-sm mt-8">3 场景闭环 = 对话匹配 → 干活执行 → 修炼迭代 · 真实命令看得见</div>
+  </div>
+  <div class="slide-num"><span class="current">16</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P10 对话 4 ============== -->
+<section class="slide" data-slide="16">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <div class="h2">对话 4</div>
+    <div class="sub mt-8" style="margin-bottom: 14px;">用户问"loop 怎么跑" · Mavis 讲 5 步节奏</div>
+    <div class="chat-window" style="flex: 1; max-height: 720px;">
+      <div class="chat-titlebar">
+        <div class="chat-dot r"></div><div class="chat-dot y"></div><div class="chat-dot g"></div>
+        <div class="chat-title">Mavis Code · 演示项目</div>
+      </div>
+      <div class="chat-body">
+        <div class="bubble user">loop 怎么跑起来？节奏是啥？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          5 步：1. 做任务 · 失败 · 2. 挖根因 · 5 Why · 3. 改 skill · 加反模式 · 4. 入库 · commit · 5. 复盘 · dream-log
+          <div class="bubble-meta">loop 5 步</div>
+        </div>
+        <div class="bubble user">看起来我之前都在 1-2 步就停了</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          对，90% 的人停在第 2 步 · 挖到根因 = 不修 · 改 skill = 不会改 · 入库 = 懒得写 · 复盘 = 忘了
+          <div class="bubble-meta">卡点分布</div>
+        </div>
+        <div class="bubble user">那怎么办？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          别一次跑 5 步 · 只跑 1 步 = 跑通 1 次 · 第 2 周加 1 步 · 第 4 周 5 步全跑
+          <div class="bubble-meta">✓ 渐进</div>
+        </div>
+        <div class="bubble user">一周能跑通吗？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          我自己 7 天 122 commits · pretty-skills 就是这么跑出来的
+          <div class="bubble-meta">✓ 7 天实证</div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <div class="chat-input-box">输入消息 ...</div>
+        <div class="chat-send">发送</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num"><span class="current">17</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P10.5 对话 5 ============== -->
+<section class="slide" data-slide="17">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <div class="h2">对话 5</div>
+    <div class="sub mt-8" style="margin-bottom: 14px;">用户问"我今天该做什么" · Mavis 给 3 件事</div>
+    <div class="chat-window" style="flex: 1; max-height: 720px;">
+      <div class="chat-titlebar">
+        <div class="chat-dot r"></div><div class="chat-dot y"></div><div class="chat-dot g"></div>
+        <div class="chat-title">Mavis Code · 演示项目</div>
+      </div>
+      <div class="chat-body">
+        <div class="bubble user">听着挺好，但我现在该做啥？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          3 件事：① 写 1 个你自己的 skill · ② 跑 1 个真实任务 · ③ 写下来给别人看
+          <div class="bubble-meta">3 件事</div>
+        </div>
+        <div class="bubble user">我写什么 skill？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          你最常做的那个活 · 比如「公众号排版」「交易复盘」「H5 攻略」 · 从你做过 3 次以上的事情里挑
+          <div class="bubble-meta">选 skill 原则</div>
+        </div>
+        <div class="bubble user">我做过的事情很多，怎么选？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          1 个判断标准：是不是「我不在场也能跑」 · 是 → 提 skill · 否 → 留 prompt
+          <div class="bubble-meta">✓ 1 句话选 skill</div>
+        </div>
+        <div class="bubble user">懂了，我去挑</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          👊 去吧 · 挑完告诉我，我帮你走 3 步入库
+          <div class="bubble-meta">✓ CTA 触发</div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <div class="chat-input-box">输入消息 ...</div>
+        <div class="chat-send">发送</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num"><span class="current">18</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P11 对话 6 ============== -->
+<section class="slide" data-slide="18">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <div class="h2">对话 6</div>
+    <div class="sub mt-8" style="margin-bottom: 14px;">用户问"怎么开始" · Mavis 演示 ps add</div>
+    <div class="chat-window" style="flex: 1; max-height: 720px;">
+      <div class="chat-titlebar">
+        <div class="chat-dot r"></div><div class="chat-dot y"></div><div class="chat-dot g"></div>
+        <div class="chat-title">Mavis Code · 演示项目</div>
+      </div>
+      <div class="chat-body">
+        <div class="bubble user">我连"写 1 个 skill"都不会，怎么开始？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          我现场演示 · <code>ps add ai-image-to-pptx</code> · <code>ps list | grep 你刚沉淀的</code> · <code>ps contribute</code> 上传社区
+          <div class="bubble-meta">✓ 3 命令</div>
+        </div>
+        <div class="bubble user">ps 命令从哪装？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          [亮 pretty-skills 仓库 16 领域目录树] · curl 装在 <code>~/.minimax/knowledge/pretty-skills/</code> · 现在 16 领域 · 62 case · 12 PASS
+          <div class="bubble-meta">✓ 仓库位置</div>
+        </div>
+        <div class="bubble user">你自己在用什么 skill？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          装在 Mavis 里的 hyperframes 系列 20 个 + 你 pretty-skills 的所有 skill · 用哪个 load 哪个
+          <div class="bubble-meta">✓ 已装数量</div>
+        </div>
+        <div class="bubble user">我也要装 · 怎么开始？</div>
+        <div class="bubble mavis">
+          <span class="bubble-tag">Mavis</span>
+          现在就装 · 1 行命令：<code>git clone https://github.com/huangrichao2020/pretty-skills.git</code> · 然后 <code>ps add 你的第一个 skill</code>
+          <div class="bubble-meta">✓ 1 行起步</div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <div class="chat-input-box">输入消息 ...</div>
+        <div class="chat-send">发送</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num"><span class="current">19</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P12 harness vs loop 对比 ============== -->
+<section class="slide" data-slide="19">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag">收尾 · 关键对撞</span>
+    <div class="h2">harness（事后修正）vs loop（流程里就把控）</div>
+    <div class="sub mt-8" style="margin-bottom: 14px;">5 步 vs 5 步 · pretty-skills 是事后修 · taste-skill 是全程控 + 自动跑 + 人审</div>
+
+    <div class="split-2" style="flex: 1; gap: 20px; align-items: stretch;">
+      <!-- 左：harness 5 步（事后修正） -->
+      <div class="card" style="border-top: 4px solid var(--c-blue); display: flex; flex-direction: column;">
+        <div class="section-title" style="color: var(--c-blue); display: flex; justify-content: space-between; align-items: center;">
+          <span>harness 5 步 · 事后修正</span>
+          <span style="font-size: 12px; color: var(--c-gray); font-weight: 500;">pretty-skills 真在跑</span>
+        </div>
+        <div style="font-size: 13px; color: var(--c-gray); margin-top: 4px; margin-bottom: 10px;">
+          先做砸 · 再找根因 · 再修 skill · 再入库 · 再复盘
+        </div>
+        <div class="flow-col" style="gap: 4px; flex: 1; justify-content: center;">
+          <div class="flow-node" style="text-align: center; font-size: 14px; padding: 7px 14px;">1. 做任务 · 失败</div>
+          <div class="flow-arrow" style="font-size: 13px;">↓</div>
+          <div class="flow-node" style="text-align: center; font-size: 14px; padding: 7px 14px;">2. 挖根因 · 5 Why</div>
+          <div class="flow-arrow" style="font-size: 13px;">↓</div>
+          <div class="flow-node" style="text-align: center; font-size: 14px; padding: 7px 14px;">3. 改 skill · 加反模式</div>
+          <div class="flow-arrow" style="font-size: 13px;">↓</div>
+          <div class="flow-node" style="text-align: center; font-size: 14px; padding: 7px 14px;">4. 入库 · commit</div>
+          <div class="flow-arrow" style="font-size: 13px;">↓</div>
+          <div class="flow-node end" style="text-align: center; font-size: 14px; padding: 7px 14px;">5. 复盘 · dream-log</div>
+        </div>
+        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--c-line); font-size: 12px; color: var(--c-gray);">
+          <span class="accent" style="color: var(--c-blue);">关键词</span> · 9 维评分 + 多评委 + validation 回滚
+        </div>
+      </div>
+
+      <!-- 右：loop 5 步（流程里就把控 + 自动跑 + 人审） -->
+      <div class="card" style="border-top: 4px solid var(--c-good); display: flex; flex-direction: column; background: linear-gradient(180deg, #FAFCFE 0%, #F0FDF4 100%);">
+        <div class="section-title" style="color: var(--c-good); display: flex; justify-content: space-between; align-items: center;">
+          <span>loop 5 步 · 全程控 + 自动跑 + 人审</span>
+          <span style="font-size: 12px; color: var(--c-gray); font-weight: 500;">taste-skill 范式</span>
+        </div>
+        <div style="font-size: 13px; color: var(--c-gray); margin-top: 4px; margin-bottom: 8px;">
+          读场景 → 写手册 → Pre-flight → 定时跑 → 人审
+        </div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 5px; justify-content: center;">
+          <!-- 1. 读场景 -->
+          <div style="display: flex; align-items: center; gap: 10px; padding: 6px 10px; background: #fff; border-radius: 7px; border: 1px solid var(--c-line);">
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--c-good); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0;">1</div>
+            <div style="flex: 1;">
+              <div style="font-size: 14px; font-weight: 700; color: var(--c-ink);">读场景 · Brief Inference</div>
+              <div style="font-size: 11px; color: var(--c-gray); margin-top: 1px;">行业/受众/情绪 → 1 行 <code style="background:#fff; padding:0 4px; border-radius:3px; font-size:10px;">Design Read</code></div>
+            </div>
+          </div>
+
+          <!-- 2. 3 旋钮 -->
+          <div style="padding: 7px 10px; background: #fff; border-radius: 7px; border: 1px solid var(--c-line);">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+              <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--c-good); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0;">2</div>
+              <div style="font-size: 14px; font-weight: 700; color: var(--c-ink);">定 3 旋钮 · Design Manual</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; font-size: 11px;">
+              <div style="background: #F0FDF4; padding: 4px 7px; border-radius: 5px;">
+                <div style="font-weight: 700; color: var(--c-good); font-size: 10px;">DESIGN_VARIANCE</div>
+                <div style="color: var(--c-gray); font-size: 10px;">对称 → 打破网格</div>
+              </div>
+              <div style="background: #F0FDF4; padding: 4px 7px; border-radius: 5px;">
+                <div style="font-weight: 700; color: var(--c-good); font-size: 10px;">MOTION_INTENSITY</div>
+                <div style="color: var(--c-gray); font-size: 10px;">静态 → 视差</div>
+              </div>
+              <div style="background: #F0FDF4; padding: 4px 7px; border-radius: 5px;">
+                <div style="font-weight: 700; color: var(--c-good); font-size: 10px;">VISUAL_DENSITY</div>
+                <div style="color: var(--c-gray); font-size: 10px;">留白 → 数据密度</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Pre-flight -->
+          <div style="display: flex; align-items: center; gap: 10px; padding: 6px 10px; background: #fff; border-radius: 7px; border: 1px solid var(--c-line);">
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--c-good); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0;">3</div>
+            <div style="flex: 1;">
+              <div style="font-size: 14px; font-weight: 700; color: var(--c-ink);">Pre-flight · 5 硬约束</div>
+              <div style="font-size: 11px; color: var(--c-gray); margin-top: 1px;">颜色用途 · 8pt 网格 · 字号≤3 · 动画≤300ms · 移动端</div>
+            </div>
+          </div>
+
+          <!-- 4. 定时跑任务（新增） -->
+          <div style="display: flex; align-items: center; gap: 10px; padding: 6px 10px; background: #fff; border-radius: 7px; border: 2px dashed var(--c-good);">
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--c-good); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0;">4</div>
+            <div style="flex: 1;">
+              <div style="font-size: 14px; font-weight: 700; color: var(--c-ink);">定时跑任务 · 手册驱动</div>
+              <div style="font-size: 11px; color: var(--c-gray); margin-top: 1px;">cron 触发 · 从手册读规则 · 跑真实任务 · 不靠人推</div>
+            </div>
+          </div>
+
+          <!-- 5. 展现成果 + 人类审核（新增） -->
+          <div style="display: flex; align-items: center; gap: 10px; padding: 6px 10px; background: #fff; border-radius: 7px; border: 2px dashed var(--c-good);">
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--c-good); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0;">5</div>
+            <div style="flex: 1;">
+              <div style="font-size: 14px; font-weight: 700; color: var(--c-ink);">展现成果 · 人类审核</div>
+              <div style="font-size: 11px; color: var(--c-gray); margin-top: 1px;">把输出给人类看 · 决策采纳 · 反向改手册</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--c-line); font-size: 12px; color: var(--c-gray);">
+          <span class="good">关键词</span> · 约束原则 ≠ 模板 · human-in-the-loop · 让 AI 推断设计语言
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-sm mt-10" style="text-align:center; border-left-color: var(--c-good);">
+      harness <strong style="color: var(--c-blue);">事后修</strong> · loop <strong style="color: var(--c-good);">全程控 + 自动跑 + 人审</strong> · 真正成熟的 skill 库两个都要
+    </div>
+  </div>
+  <div class="slide-num"><span class="current">20</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P13 CTA ============== -->
+<section class="slide" data-slide="20" style="background: var(--c-ink);">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%; color: #fff; justify-content: center;">
+    <span class="tag" style="background: var(--c-blue);">CTA</span>
+    <div class="h2" style="color: #fff;">三个问题</div>
+    <div class="cta-q" style="color: #fff; margin-top: 30px;">
+      <span class="cta-q-num">1.</span>你现在的 <span class="accent" style="color: var(--c-blue-soft);">prompt</span> 有几页？
+    </div>
+    <div class="cta-q" style="color: #fff;">
+      <span class="cta-q-num">2.</span>你有自己的 <span class="accent" style="color: var(--c-blue-soft);">skill 库</span> 吗？
+    </div>
+    <div class="cta-q" style="color: #fff;">
+      <span class="cta-q-num">3.</span>你的 <span class="accent" style="color: var(--c-blue-soft);">loop</span> 跑起来了吗？
+    </div>
+    <div class="tagline tagline-blue" style="margin: 32px auto 0; display:table; font-size: 18px;">先养出第 1 个 skill，剩下的 loop 自己会跑</div>
+  </div>
+  <div class="slide-num" style="color: var(--c-blue-soft);"><span class="current">21</span> / <span class="total">22</span></div>
+</section>
+
+<!-- ============== P14 ai-image-to-pptx · 5 步 pipeline ============== -->
+<section class="slide" data-slide="21" style="background: linear-gradient(135deg, #F4F6FA 0%, #E5E9F2 100%);">
+  <div style="width:100%; max-width:1760px; margin:0 auto; display:flex; flex-direction:column; height:100%;">
+    <span class="tag" style="background: linear-gradient(135deg, #0A2540 0%, #2563EB 100%);">skill 拆解</span>
+    <div class="h2">ai-image-to-pptx · <span class="accent">5 步 pipeline</span></div>
+    <div class="sub mt-8" style="margin-bottom: 12px;">skill = AI 出 N 张风格统一图 + 嵌入真实 .pptx · 9 宫图只是 8 幕输出可视化的副产品</div>
+    <div style="flex: 1; display: flex; gap: 16px;">
+      <!-- 左侧：9 宫图（作为 output proof）-->
+      <div style="flex: 1.2; display: flex; flex-direction: column; gap: 6px;">
+        <div style="flex: 1; background: #fff; border-radius: 16px; padding: 12px; box-shadow: 0 6px 24px rgba(10, 37, 64, 0.10); border: 1px solid var(--c-line); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+          <img src="./case-9grid/ppt-9grid.png" alt="PPT 9 宫图" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px;" />
+        </div>
+        <div style="text-align: center; font-size: 11px; color: var(--c-gray); padding: 4px 0;">
+          ↑ 8 幕真实输出 · 拼成 3×3 = 1 眼看清<br>
+          （案例：NODESK.AI Cartman 2026 · 马卡龙风）
+        </div>
+        <div style="background: var(--c-ink); color: var(--c-blue-soft); border-radius: 8px; padding: 8px 12px; font-size: 11px; line-height: 1.5;">
+          <b style="color: #fff;">9 宫图 ≠ skill</b> · 是 8 张图拼起来预览<br>
+          <b style="color: #fff;">真正输出 = .pptx</b> · PowerPoint 可二次编辑
+        </div>
+      </div>
+      <!-- 右侧：5 步 pipeline -->
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+        <div style="font-size: 13px; font-weight: 700; color: var(--c-blue); letter-spacing: 1px;">5 步 pipeline · skill 本身</div>
+        <div style="display: flex; align-items: stretch; gap: 8px; padding: 10px 12px; background: linear-gradient(135deg, #FFFFFF 0%, #F4F6FA 100%); border-left: 4px solid var(--c-blue); border-radius: 8px; box-shadow: 0 2px 6px rgba(10, 37, 64, 0.04);">
+          <div style="background: var(--c-blue); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0;">1</div>
+          <div style="flex: 1;">
+            <div style="font-size: 14px; font-weight: 700; color: var(--c-ink);">选题</div>
+            <div style="font-size: 11px; color: var(--c-gray); margin-top: 2px; line-height: 1.5;">8 幕内容大纲 · 每页 5 字段（核心主张 / 认知锚点 / 关键要点 / 数据 / 金句）</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: stretch; gap: 8px; padding: 10px 12px; background: linear-gradient(135deg, #FFFFFF 0%, #F4F6FA 100%); border-left: 4px solid var(--c-blue); border-radius: 8px; box-shadow: 0 2px 6px rgba(10, 37, 64, 0.04);">
+          <div style="background: var(--c-blue); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0;">2</div>
+          <div style="flex: 1;">
+            <div style="font-size: 14px; font-weight: 700; color: var(--c-ink);">风格</div>
+            <div style="font-size: 11px; color: var(--c-gray); margin-top: 2px; line-height: 1.5;">6 主题任选：蓝白灰 / 橙 / 绿 / 红 / 紫蓝 / 黑金 · 或自定义（这次的马卡龙就是）</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: stretch; gap: 8px; padding: 10px 12px; background: linear-gradient(135deg, #FFFFFF 0%, #F4F6FA 100%); border-left: 4px solid var(--c-blue); border-radius: 8px; box-shadow: 0 2px 6px rgba(10, 37, 64, 0.04);">
+          <div style="background: var(--c-blue); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0;">3</div>
+          <div style="flex: 1;">
+            <div style="font-size: 14px; font-weight: 700; color: var(--c-ink);">配图 · AI 出图</div>
+            <div style="font-size: 11px; color: var(--c-gray); margin-top: 2px; line-height: 1.5;">matrix_generate_image 出 N 张 · 风格统一 · 每张 = 1 幕 · 这是 skill 的核心</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: stretch; gap: 8px; padding: 10px 12px; background: linear-gradient(135deg, #FFFFFF 0%, #F4F6FA 100%); border-left: 4px solid var(--c-good); border-radius: 8px; box-shadow: 0 2px 6px rgba(10, 37, 64, 0.04);">
+          <div style="background: var(--c-good); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0;">4</div>
+          <div style="flex: 1;">
+            <div style="font-size: 14px; font-weight: 700; color: var(--c-ink);">排版 · 预览</div>
+            <div style="font-size: 11px; color: var(--c-gray); margin-top: 2px; line-height: 1.5;">html-ppt-viewer 翻页调试 · 讲前确认排版无问题</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: stretch; gap: 8px; padding: 10px 12px; background: linear-gradient(135deg, #FFFFFF 0%, #F4F6FA 100%); border-left: 4px solid var(--c-good); border-radius: 8px; box-shadow: 0 2px 6px rgba(10, 37, 64, 0.04);">
+          <div style="background: var(--c-good); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0;">5</div>
+          <div style="flex: 1;">
+            <div style="font-size: 14px; font-weight: 700; color: var(--c-ink);">导出 · 真实 .pptx</div>
+            <div style="font-size: 11px; color: var(--c-gray); margin-top: 2px; line-height: 1.5;">python-pptx 把 N 张图嵌进真实 .pptx · PowerPoint / Keynote / WPS 都能开</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 12px; color: var(--c-gray);">
+      <span>skill：ai-image-to-pptx  ·  5 步出 .pptx</span>
+      <span>9 宫图 = 输出可视化的副产品 · 不是 skill</span>
+    </div>
+  </div>
+  <div class="slide-num"><span class="current">22</span> / <span class="total">22</span></div>
+</section>
+
+</div>
+
+<div class="kbd">← / → 翻页 · F 全屏 · O 概览</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+let overviewMode = false;
+
+function show(idx) {
+  if (idx < 0 || idx >= slides.length) return;
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === idx);
+  });
+  current = idx;
+  const active = slides[idx];
+  const targets = active.querySelectorAll('.h1, .h2, .h3, .card, table, .flow, .tree, .metric, .quote, .quote-sm, .tagline, .gun-icon, .cta-q, .tag, .chat-window, .bubble, .arch-tile, .arch-tile-dark, .demo-scene');
+  gsap.fromTo(targets,
+    { opacity: 0, y: 20 },
+    { opacity: 1, y: 0, duration: 0.5, stagger: 0.04, ease: 'power2.out' }
+  );
+}
+
+function next() { show(Math.min(current + 1, slides.length - 1)); }
+function prev() { show(Math.max(current - 1, 0)); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+  else if (e.key === 'Home') show(0);
+  else if (e.key === 'End') show(slides.length - 1);
+  else if (e.key === 'f' || e.key === 'F') {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  }
+  else if (e.key === 'o' || e.key === 'O') {
+    overviewMode = !overviewMode;
+    if (overviewMode) {
+      slides.forEach(s => {
+        s.style.display = 'flex';
+        s.style.position = 'relative';
+        s.style.inset = 'auto';
+        s.style.width = '20%';
+        s.style.height = 'auto';
+        s.style.minHeight = '200px';
+        s.style.transform = 'scale(0.16)';
+        s.style.transformOrigin = 'top left';
+        s.style.opacity = '1';
+        s.style.overflow = 'hidden';
+      });
+    } else {
+      slides.forEach((s, i) => {
+        s.style.cssText = '';
+        s.classList.toggle('active', i === current);
+      });
+    }
+  }
+});
+
+show(0);
+</script>
+</body>
+</html>
